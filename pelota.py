@@ -17,7 +17,7 @@ pygame.display.set_caption("Juego ejemplo con Pygame por Borja")
 # Necesitamos ciertas cosas
 
 speed = [1,1] # Velocidad en modo lista (x,y)
-speed2 = [1,1]
+speed2 = [-1,-1]
 white = 255, 255, 255 # Color blanco del fondo
 
 collision = pygame.mixer.Sound('coin.wav')
@@ -33,7 +33,7 @@ textY = 0
 
 ball = pygame.image.load("ball.png") # Cargamos nuestra imagen
 ballrect = ball.get_rect()
-ball2 = pygame.image.load("ball.png")
+ball2 = pygame.image.load("ball2.png")
 ballrect2 = ball2.get_rect()
 
 points = 0
@@ -78,16 +78,7 @@ while run:
 			pygame.mixer.Sound.play(collision)
 			points += 1
 
-	# Colisión de la segunda pelota con la barra
-	if barrect.colliderect(ballrect2):
-		if barrect.top < 100 or barrect.bottom > 500:
-			speed2[0] = -speed2[0]+1
-			points -= 1
-			pygame.mixer.Sound.play(collision2)
-		else:
-			speed2[0] = -speed2[0]-1
-			pygame.mixer.Sound.play(collision)
-			points += 1
+
 
 
 
@@ -108,6 +99,20 @@ while run:
 	if ballrect2.top < 0 or ballrect2.bottom > height:
 		speed2[1] = -speed2[1]  # Simulamos el rebote
 
+		# Colisión de la segunda pelota con la barra
+		if barrect.colliderect(ballrect2):
+			if barrect.top < 100 or barrect.bottom > 500:
+				speed2[0] = -speed2[0] + 1
+				points -= 1
+				pygame.mixer.Sound.play(collision2)
+			else:
+				speed2[0] = -speed2[0] - 1
+				pygame.mixer.Sound.play(collision)
+				points += 1
+
+	# Comprobamos la puntuación para saca la segunda pelota
+	if points > 5:
+		screen.blit(ball2, ballrect2)
 
 	# Ahora el fondo
 	screen.blit(background, [0,0])
@@ -116,9 +121,7 @@ while run:
 	screen.blit(score, (0, 0))
 	pygame.display.flip()
 
-	# Comprobamos la puntuación para saca la segunda pelota
-	if points > 50:
-		screen.blit(ball2, ballrect2)
+
 	
 #Salimos
 pygame.quit()
